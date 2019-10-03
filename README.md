@@ -1,5 +1,5 @@
 # quackbox
-general functions for use with particle distributions. (developed from use with hydro sims)
+common functions used on particle distributions (in the context of hydrodynamical simulations)
 
 Containing: 
 - rotations for particle distributions (quaternion based)
