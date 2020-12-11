@@ -1,8 +1,10 @@
+![diagram](./plots/cnn_schematic.png)
+
 # sdss_CNN
 
 Deep convolutional neural network for predicting a galaxy's spin based on SDSS photometry (RGB images).
 
-This directory using kinematic information from [MaNGA](https://www.sdss.org/surveys/manga/), along with photometry from the Sloan Digital Sky Survey ([SDSS](https://classic.sdss.org/dr7/)), to train a convolutional neural network to predict a galaxy's spin. The aim of the game here, is to train a convolutional neural network to predict a galaxy's spin based on an image of the galaxy. MaNGA observations (resulting in kinematic information) are expensive and hence we only have 1000s of galaxies with this information. On the other hand, we have millions of SDSS galaxy images, so extrapolating kinematic properties would be useful.
+This directory using kinematic information from [MaNGA](https://www.sdss.org/surveys/manga/), along with photometry from the Sloan Digital Sky Survey ([SDSS](https://classic.sdss.org/dr7/)), to train a convolutional neural network (CNN) to predict a galaxy's spin. MaNGA observations (resulting in kinematic information) are expensive and hence we only have 1000s of galaxies with estimated spin values (at least computed directly from kinematics). On the other hand, we have millions of SDSS galaxy images, so extrapolating kinematic properties would be useful.
 
 ## Data
 
@@ -23,11 +25,12 @@ For input into the CNN, we downsample all galaxy images to be size (80, 80, 3) (
 | Test | 966 |
 | Validation | 966 |
 
-Galaxy images are augmented for the training sample, where during each epoch of the training images are randomly zoomed (±25%), rotated (±45 degrees), flipped (both horizontally and vertically), and, shifted both vertically and horizontally (by 5 per cent). 
+Galaxy images are augmented for the training sample, where during each epoch of the training images are randomly zoomed (±25%), rotated (±45 degrees), flipped (both horizontally and vertically), and, shifted both vertically and horizontally (by 5%). 
 
 ## CNN
 
 ### Architecture
 
-![diagram](./plots/cnn_schematic.png)
-### 
+For a schematic of the CNN see `./plots/cnn_schematic.png` (or in the banner of this readme). The neural network consists of 5 convolutional layers (number of filters : 64, 96, 128, 192, 192, kernel size : 6x6, 5x5, 2x2, 2x2, 2x2 respectively) each with dropout (0.5, 0.25, 0.25, 0.25, 0.25) and ReLu activations. Immediately after the second and third convolutional layers, there is a MaxPooling operation. After the final convolutional layer, the output is flatten and passed to 3 fully connected hidden layers (numer of nodes : 43200, 128, 64 respectively) with dropout (0.25) after the second, and finally, to a single output node with a linear activation. This leaves 5,994,145 parameters that are optimised in the model training.
+
+### Model hyperparameters
