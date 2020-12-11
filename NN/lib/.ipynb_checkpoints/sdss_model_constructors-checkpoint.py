@@ -59,3 +59,55 @@ def build_baseline_CNN(input_shape):
                   optimizer=tf.keras.optimizers.Adam(0.001))
 
     return model
+
+
+def build_tuning_CNN(hp):
+    '''
+    Building convolutional neural network with tunable hyperparameters
+    of vaguely similar architecture detailed in D-S 2018
+    https://ui.adsabs.harvard.edu/abs/2018MNRAS.476.3661D/abstract
+    
+    For now just tuning number of filters in each layer.
+    '''
+    model = Sequential()
+
+    # first convolutional layer with dropout
+    hp_filters = hp.Choice('filters_1', values = [32, 64]) 
+    model.add(Conv2D(hp_filters, kernel_size=(6, 6), activation='relu', 
+                     input_shape=(80, 80, 3)))
+    model.add(Dropout(0.5))
+    
+    # second convolutional layer with maxpool and dropout
+    hp_filters = hp.Choice('filters_2', values = [64, 96]) 
+    model.add(Conv2D(hp_filters, kernel_size=(5, 5), activation='relu'))
+    model.add(MaxPool2D())
+    model.add(Dropout(0.25))
+    
+    # third convolutional layer with maxpool and dropout
+    hp_filters = hp.Choice('filters_3', values = [128, 192]) 
+    model.add(Conv2D(hp_filters, kernel_size=(2, 2), activation='relu'))
+    model.add(MaxPool2D())
+    model.add(Dropout(0.25))
+    
+    # fourth convolutional layer with dropout
+    hp_filters = hp.Choice('filters_4', values = [128, 192]) 
+    model.add(Conv2D(hp_filters, kernel_size=(2, 2), activation='relu'))
+    model.add(Dropout(0.25))
+    
+    # fifth convolutional layer with dropout
+    hp_filters = hp.Choice('filters_5', values = [128, 192]) 
+    model.add(Conv2D(hp_filters, kernel_size=(2, 2), activation='relu'))
+    model.add(Dropout(0.25))
+    
+    # Flattening and output dense layers.
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.25))
+    model.add(Dense(64))
+    model.add(Dense(1))
+    
+    # compiling with MSE and adam
+    model.compile(loss='mean_squared_error',
+                  optimizer=tf.keras.optimizers.Adam(0.001))
+    
+    return model
