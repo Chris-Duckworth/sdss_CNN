@@ -51,7 +51,7 @@ This leaves 5,994,145 parameters that are optimised in the model training.
 
 ### Model hyperparameters
 
-Basic tuning (by hand) was first implemented to build the rough model architecture (i.e. number of hidden layers and select a sensible initial learning rate). Further hyperparameter tuning (using [`keras-tuner`](https://keras-team.github.io/keras-tuner/) was then implemented to select filter size in each of the convolutional layers and associated dropout. Batch-Normalisation was found _here_ to decrease performance when implemented in tandem with dropout. 
+Basic tuning (by hand) was first implemented to build the rough model architecture (i.e. number of hidden layers and select a sensible initial learning rate). Further hyperparameter tuning (using [`keras-tuner`](https://keras-team.github.io/keras-tuner/)) was then implemented to select filter size in each of the convolutional layers and associated dropout. Batch-Normalisation was found _here_ to decrease performance when implemented in tandem with dropout. 
 
 Hyperparameters : 
 - Learning rate : η=0.001 with ADAM optimiser (i.e. with its own flavour of momentum) which reduces on plateau (patience=5) to be 0.2 of the previous LR to a minimum value of η=0.00001.
