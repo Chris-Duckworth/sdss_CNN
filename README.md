@@ -12,4 +12,22 @@ MaNGA data is taken from the Data Analysis Pipeline ([DAP](https://www.sdss.org/
 ### SDSS photometry (i.e. RGB image)
 SDSS has created the most detailed three-dimensional maps of the Universe (_so far_) with deep multi-color images of galaxies covering one third of the sky. The vast majority of MaNGA galaxies have been imaged by SDSS, which we can use as input into our convolutional neural network. The exact resolution of an image (relative to the galaxy size) is variable (since it is dependent on the distance to the galaxy). 
 
-### Pre-processing
+Galaxy images are pulled from the SDSS database on [sciserver](https://www.sciserver.org/) see in `./data/on_sciserver/`. Each image downloaded is 424 x 424 pixels in size where each pixel is set to be 0.02R<sub>e</sub> (elliptical petrosian half-light radius) of the target galaxy (i.e. image covers 8.48R<sub>e</sub> for each galaxy). 
+
+### Pre-processing for CNN
+For input into the CNN, we downsample all galaxy images to be size (80, 80, 3) (to avoid fitting noise), and, normalised so pixel values (in each channel) range [0, 1]. We have 6437 galaxies, both with SDSS images and MaNGA kinematic information which we use to train, validate, and, test our network. We split (70, 15, 15)% so that:
+
+| Sample  | Count |
+| ------------- | ------------- |
+| Training | 4505 |
+| Test | 966 |
+| Validation | 966 |
+
+Galaxy images are augmented for the training sample, where during each epoch of the training images are randomly zoomed (±25%), rotated (±45 degrees), flipped (both horizontally and vertically), and, shifted both vertically and horizontally (by 5 per cent). 
+
+## CNN
+
+### Architecture
+
+![diagram](./plots/cnn_schematic.png)
+### 
