@@ -53,6 +53,7 @@ def build_baseline_CNN(input_shape):
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.25))
     model.add(Dense(64))
+    model.add(Dropout(0.25))
     model.add(Dense(1))
     
     model.compile(loss='mean_squared_error',
@@ -91,7 +92,7 @@ def build_tuning_CNN(hp):
     
     # fourth convolutional layer with dropout
     hp_filters = hp.Choice('filters_4', values = [128, 192]) 
-    model.add(Conv2D(hp_filters, kernel_size=(2, 2), activation='relu'))
+    model.add(Conv2D(hp_filters, kernel_size=(3, 3), activation='relu'))
     model.add(Dropout(0.25))
     
     # fifth convolutional layer with dropout
