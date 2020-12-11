@@ -31,6 +31,31 @@ Galaxy images are augmented for the training sample, where during each epoch of 
 
 ### Architecture
 
-For a schematic of the CNN see `./plots/cnn_schematic.png` (or in the banner of this readme). The neural network consists of 5 convolutional layers (number of filters : 64, 96, 128, 192, 192, kernel size : 6x6, 5x5, 2x2, 2x2, 2x2 respectively) each with dropout (0.5, 0.25, 0.25, 0.25, 0.25) and ReLu activations. Immediately after the second and third convolutional layers, there is a MaxPooling operation. After the final convolutional layer, the output is flatten and passed to 3 fully connected hidden layers (numer of nodes : 43200, 128, 64 respectively) with dropout (0.25) after the second, and finally, to a single output node with a linear activation. This leaves 5,994,145 parameters that are optimised in the model training.
+For a schematic of the CNN see `./plots/cnn_schematic.png` (or in the banner of this readme). The neural network consists of :
+
+- 5 convolutional layers 
+  - number of filters : 64, 96, 128, 192, 192
+  - kernel size : 6x6, 5x5, 2x2, 2x2, 2x2
+  - dropout : 0.5, 0.25, 0.25, 0.25, 0.25
+  - ReLu activations
+  - MaxPooling after the second and third convolutional layers
+
+- Flattening and 3 fully connected hidden layers 
+  - numer of nodes : 43200, 128, 64
+  - dropout : 0.25 (after second only)
+  - activations : Linear, ReLu, Linear
+
+- Output node with linear activation (i.e. for regression to predict value in [0, 1] range.
+
+This leaves 5,994,145 parameters that are optimised in the model training.
 
 ### Model hyperparameters
+
+Basic tuning (by hand) was first implemented to build the rough model architecture (i.e. number of hidden layers and select a sensible initial learning rate). Further hyperparameter tuning (using [`keras-tuner`](https://keras-team.github.io/keras-tuner/) was then implemented to select filter size in each of the convolutional layers and associated dropout. Batch-Normalisation was found _here_ to decrease performance when implemented in tandem with dropout. 
+
+Hyperparameters : 
+- Learning rate : η=0.001 with ADAM optimiser (i.e. with its own flavour of momentum) which reduces on plateau (patience=5) to be 0.2 of the previous LR to a minimum value of η=0.00001.
+- Loss : Mean squared error
+- Epochs : 
+
+### Model evaluation 
